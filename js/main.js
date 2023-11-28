@@ -142,9 +142,29 @@ function render() {
 // getRandom function -> for our computer player to select a move
 
 // handleChoice function -> for the player to select a move (will be an event listener)
+// we'll use the innertext of our event target to determine what the move is
+function handleChoice(evt) {
+    console.log('this is what was clicked: \n', evt.target.tagName);
+
+    // handle when the user clicks something that is not a button
+    if (evt.target.tagName !== 'BUTTON') { return; }
+
+    // change results.p to whatever is selected using innertext
+    results.p = evt.target.innerText.toLowerCase();
+
+    // call the random selector for our computer player
+
+    // check for a winner
+
+    // update scores accordingly
+
+    // render the changes to the DOM
+    render();
+}
 
 // getWinner function -> determine who wins: player, computer, tie
 
 
 
 /*------ event listeners ------*/
+document.querySelector('main').addEventListener('click', handleChoice);
