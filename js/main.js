@@ -140,6 +140,28 @@ function render() {
 }
 
 // getRandom function -> for our computer player to select a move
+function getRandomRPS() {
+    // saves our object keys to a variable
+    const rps = Object.keys(RPS_LOOKUP);
+    console.log('rps in getRandomRPS: \n', rps);
+
+    // rps is going to be an array so we can use Math.Random
+    const randomIdx = Math.floor(Math.random() * rps.length);
+    console.log('randomIdx in getRandomRPS: \n', randomIdx);
+
+    return rps[randomIdx];
+}
+
+// getWinner function -> determine who wins: player, computer, tie
+function getWinner() {
+    // compare our results object keys and base the output of this function on 
+    // whatever beats the other thing between player and computer
+    if (results.p === results.c) return 't';
+
+    // if the player's choice beats the computer choice, declare player the winner
+    // otherwise (since not tie), computer wins
+    return RPS_LOOKUP[results.p].beats === results.c ? 'p' : 'c';
+}
 
 // handleChoice function -> for the player to select a move (will be an event listener)
 // we'll use the innertext of our event target to determine what the move is
@@ -153,18 +175,18 @@ function handleChoice(evt) {
     results.p = evt.target.innerText.toLowerCase();
 
     // call the random selector for our computer player
+    results.c = getRandomRPS();
 
     // check for a winner
+    winner = getWinner();
+    console.log('this is the winner: \n', winner);
 
     // update scores accordingly
+    scores[winner] += 1;
 
     // render the changes to the DOM
     render();
 }
-
-// getWinner function -> determine who wins: player, computer, tie
-
-
 
 /*------ event listeners ------*/
 document.querySelector('main').addEventListener('click', handleChoice);
