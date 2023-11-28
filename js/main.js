@@ -44,6 +44,68 @@ let winner;
 
 
 /*------ functions ------*/
+// initializer function -> setup our initial state and call render
+function init() {
+    scores = {
+        p: 0,
+        c: 0,
+        t: 0
+    };
+
+    results = {
+        p: 's',
+        c: 'p'
+    };
+
+    winner = 't';
+
+    render();
+}
+
+init();
+
+// renderScores -> show how many wins/losses/ties
+function renderScores() {
+    // loop over scores object and display the scores accordingly
+    // use for in when looping over an object
+    for (let key in scores) {
+        // use key to select an html element
+        const scoreEl = document.getElementById(`${key}-score`);
+        // use bracket notation to dynamically use object values based on a changing key
+        scoreEl.innerText = scores[key];
+    }
+
+}
+
+// renderResults -> show the results of player and computer choices
+function renderResults() {
+    // this looks at the results object, pulls the values for the keys P and C
+    // then applies the image from the related part of the RPS_LOOKUP object
+    // as the src for the img tag associated with the player and computer
+    pResultEl.src = RPS_LOOKUP[results.p].img;
+    cResultEl.src = RPS_LOOKUP[results.c].img;
+
+    // this will visually identify who won the round
+    // if this element belongs to the winner, change to purple
+    // otherwise use white
+    pResultEl.style.borderColor = winner === 'p' ? 'purple' : 'white';
+    cResultEl.style.borderColor = winner === 'c' ? 'purple' : 'white';
+}
+
+// render function -> transfer/visualize all changes to the DOM
+// we'll do this by calling a couple other render functions through a countdown
+function render() {
+    renderScores();
+    renderResults();
+}
+
+
+// getRandom function -> for our computer player to select a move
+
+// handleChoice function -> for the player to select a move (will be an event listener)
+
+// getWinner function -> determine who wins: player, computer, tie
+
 
 
 /*------ event listeners ------*/
