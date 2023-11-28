@@ -24,6 +24,8 @@ const RPS_LOOKUP = {
     s: {img: 'imgs/scissors.png', beats: 'p'}
 };
 
+// our audio file to play during countdown
+const AUDIO = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-simple-countdown-922.mp3');
 
 /*------ cached element references ------*/
 const pResultEl = document.getElementById('p-result');
@@ -53,8 +55,8 @@ function init() {
     };
 
     results = {
-        p: 's',
-        c: 'p'
+        p: 'r',
+        c: 'r'
     };
 
     winner = 't';
@@ -74,7 +76,6 @@ function renderScores() {
         // use bracket notation to dynamically use object values based on a changing key
         scoreEl.innerText = scores[key];
     }
-
 }
 
 // renderResults -> show the results of player and computer choices
@@ -92,13 +93,51 @@ function renderResults() {
     cResultEl.style.borderColor = winner === 'c' ? 'purple' : 'white';
 }
 
-// render function -> transfer/visualize all changes to the DOM
 // we'll do this by calling a couple other render functions through a countdown
-function render() {
-    renderScores();
-    renderResults();
+// renderCountdown -> this will play audio and display the countdown to the user
+// this will use a callback function
+function renderCountdown(cbFunc) {
+    // start the count at 3
+    let count = 3;
+
+    // display countdown div and set the text
+    countdownEl.style.visibility = 'visible';
+    countdownEl.innerText = count;
+
+    // timer will update the DOM every second
+    // once the timer is up, display the results
+    AUDIO.currentTime = 0;
+    AUDIO.play();
+
+    // set up timer
+    // setInterval takes two arguments -> callback fn, time (in ms), 
+    const timerId = setInterval(() => {
+        // every second, decrease the count
+        count--;
+        // if count is truthy, do something
+        if (count) {
+            console.log('interval running. count: ', count);
+            countdownEl.innerText = count;
+        } else {
+            // otherwise, do something else
+            // stop interval from running so it doesn't run infinitely
+            clearInterval(timerId);
+            countdownEl.style.visibility = 'hidden';
+
+            // when the timer is done, run the callback function
+            cbFunc();
+        }
+        // timeouts and intervals use milliseconds, 1/1000th of a second
+    }, 1000);
 }
 
+// render function -> transfer/visualize all changes to the DOM
+function render() {
+    renderCountdown(() => {
+        renderScores();
+        renderResults();
+    });
+}
 
 // getRandom function -> for our computer player to select a move
 
