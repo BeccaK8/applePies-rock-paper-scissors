@@ -1,1 +1,1 @@
-console.log('js is linked and working');
+console.log('js is linked and ready')
